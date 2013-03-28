@@ -31,11 +31,8 @@ Step 5: Upload your codes.
 [Download Wordpress](http://wordpress.org/latest.zip)
 
 ```
-sudo chmod 777 ¨CR /var/www
+sudo chmod 777 -R /var/www
 ```
-
-Step 6: There is no step 6.
----------------------------
 
 Install node.js 
 ---------------
@@ -45,4 +42,14 @@ sudo apt-get install python-software-properties python g++ make
 sudo add-apt-repository ppa:chris-lea/node.js
 sudo apt-get update
 sudo apt-get install nodejs
+```
+
+Run node.js
+-----------
+
+```
+sudo mkdir /var/chat
+sudo chmod 777 -R /var/chat
+npm install
+nodejs app
 ```
