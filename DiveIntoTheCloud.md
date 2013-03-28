@@ -38,7 +38,9 @@ Start / stop the Apache
 -----------------------
 
 Start `sudo /etc/init.d/apache2 start`
+
 Stop `sudo /etc/init.d/apache2 stop`
+
 Retart `sudo /etc/init.d/apache2 restart`
 
 Install node.js 
