@@ -1,0 +1,23 @@
+body {
+    background-color: #fff;
+    color: #111;
+    padding-top: 50px;
+}
+
+fieldset {
+    background-color: #fff;
+    padding: 16px;
+}
+
+label {
+    color: #0088cc;
+}
+
+p.help-block {
+    color: #ccc;
+    margin-left: 16px;
+}
+
+div.jumbotron{
+    color: #0088cc;
+}
