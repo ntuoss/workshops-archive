@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Samba Tutorial</title>
+<link rel="stylesheet" href="https://stackedit.io/res-min/themes/base.css" />
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body><div class="container"><p>Hi guys, I’m Shawn. This is a tutorial which guides you to set up file sharing server on Raspberry Pi using <em>Samba</em>. </p>
+
+<blockquote>
+  <p>Before following this tutorial, please make sure you have Raspbian properly installed on your SD/microSD card for your Pi.</p>
+</blockquote>
+
+<h2 id="part-1">Part 1</h2>
+
+<p>For the first part, you need to find the IP address of the Pi in your local network. By default, your Pi gets its IP using DHCP service which means that the IP address is dynamically allocated to the Pi when it boots up. Therefore, you need to go to your router’s setting page and look for the panel which shows you all the devices connected to your router. In that panel, you should be able to see a device whose name is <em>raspberrypi</em>. Please take note of the IP address associated with that device.</p>
+
+<blockquote>
+  <p>If you cannot find your Pi’s IP, try to search on Google for how to get IP addresses of your devices with the brand of your router. Different routers have different looking panels and therefore the way you find the IPs can vary from brand to brand, model to model.</p>
+</blockquote>
+
+<h2 id="part-2">Part 2</h2>
+
+<p>After you find the IP of your Pi, you are ready to get started. In this part, you are going to connect to your Pi remotely using SSH (SecureShell), which allows you to access your Pi’s command line remotely and securely.</p>
+
+<p>For Mac OS X and Linux users, you can just use your Terminal to connect to your Pi using SSH. Open your terminal and type the following command</p>
+
+<pre><code>ssh pi@xxx.xxx.xxx.xxx (replace xxx.xxx.xxx.xxx with your Pi's IP)
+</code></pre>
+
+<p>Type the password <em>raspberry</em> when it promotes you to. This command is to use SSH to connect to your Pi and login as the user <em>pi</em>.</p>
+
+<p>For Windows users, you need a tiny program called “PuTTY” to use SSH. You can download the program <a href="http://the.earth.li/~sgtatham/putty/latest/x86/putty.exe">here</a>. After you downloaded the program, run it and put your Pi’s IP for the “Host Name” and click “Open”. Then you should be able to connect using the user <em>pi</em>.</p>
+
+<blockquote>
+  <p>The user <em>pi</em> comes with the Raspbian OS and its default password is <em>raspberry</em>. You can change the password if you like. To do that, please search for tutorial online.</p>
+  
+  <p>When you connect to your Pi for the first time, the terminal will ask you to confirm this is the correct device you are trying to connect and trust it. Just type “yes” and continue.</p>
+</blockquote>
+
+<p>If you connect to your Pi successfully, you should see something like this</p>
+
+<pre><code>Linux raspberrypi 3.12.28+ #709 PREEMPT Mon Sep 8 15:28:00 BST 2014 armv6l
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+Last login: Sat Jan 24 01:06:19 2015 from 192.168.0.110
+pi@raspberrypi ~ $ 
+</code></pre>
+
+
+
+<h2 id="part-3">Part 3</h2>
+
+<p>Now you are remotely connected to your Pi, let’s set up the server now. For this tutorial, <em>Samba</em> is used as the protocol of sharing files between devices. <em>Samba</em> is a file sharing protocol created by Microsoft and used in Windows. And it is widely supported on other platforms.</p>
+
+<p>To install <em>Samba</em>, you can use <code>apt-get</code> which is the package manager in Raspbian. Package manager is the tool you use to install software in Linux most of the time. Before you begin to actually install <em>Samba</em>, run the following command to update <code>apt-get</code> so that you can install the latest version of <em>Samba</em> available</p>
+
+<pre><code>sudo apt-get update
+</code></pre>
+
+<p>Since <code>apt-get</code> can only be used by the <em>root</em> user, we use <code>sudo</code> here to run this command as the <em>root</em> user. It will ask you for <em>pi</em>’s password, just type <em>raspberry</em> or the password you changed to.</p>
+
+<blockquote>
+  <p>In Linux, <em>root</em> user is very powerful. Don’t run commands with sudo unless you have to.</p>
+</blockquote>
+
+<p>Now you can install <em>Samba</em>. Again you need to use <code>apt-get</code> with <code>sudo</code>. Run</p>
+
+<pre><code>sudo apt-get install samba samba-common-bin
+</code></pre>
+
+<blockquote>
+  <p>The package manager <code>apt-get</code> will ask you to comfirm installation of <em>Samba</em> and its dependencies, type “Y” to continue.</p>
+  
+  <p>In Linux, a program usually does one thing. Because of that, programs relies on other programs. Programs being relied on are called dependencies. Package manager can figure out what dependencies you need and install them for you.</p>
+</blockquote>
+
+<p>If you finish the installation, you can start editing the configuration file for <em>Samba</em> so that it knows what you want to share. You can use the text editor <code>nano</code> to edit the config file. Run this command</p>
+
+<pre><code>sudo nano /etc/samba/smb.conf
+</code></pre>
+
+<blockquote>
+  <p>Again, <code>sudo</code> is used here because only the <em>root</em> user has the “write” permission of this config file. </p>
+  
+  <p>The text editor <code>nano</code> is very easy to use. Just use the arrow keys to navigate in the file.</p>
+</blockquote>
+
+<p>Scroll down in the config file and find a line where it says</p>
+
+<pre><code>#               security = user
+</code></pre>
+
+<p>Delete the “#” in front to uncomment this line. By doing this, no one can access your shared folder anonymously.</p>
+
+<p>Then scroll down to the bottom of the file and add your sharing configuration. For example, you want to share the folder <em>/home/pi/python_games</em>, then you need to add these lines to the file</p>
+
+<pre><code>[test]
+comment = sharing test
+path = /home/pi/python_games
+valid users = pi
+force group = users
+create mask = 0660
+read only = no
+</code></pre>
+
+<blockquote>
+  <p>You can change the name in [] and the comment to whatever you like. Make sure the path is the correct path.</p>
+  
+  <p>If you like to share more folders, just make sure the name in [] and the path are different.</p>
+</blockquote>
+
+<p>Press “Ctrl + X”, then “Y”, then hit “Enter” to save changes and exit <code>nano</code>. Now we need to restart <em>Samba</em> service to load our new configuration file. Type this command</p>
+
+<pre><code>sudo service samba restart
+</code></pre>
+
+<p>If you see that samba is stopped and restarted successfully, you are good. The last step for part 3 is to add user <em>pi</em> as a <em>Samba</em> user. Run this command</p>
+
+<pre><code>smbpasswd -a pi
+</code></pre>
+
+<p>Then you can type in the password you like.</p>
+
+<blockquote>
+  <p>From now on, you can access folders shared by your Pi using the user <em>pi</em> and the password you just set. Please remember that this password is just the password for <em>Samba</em></p>
+  
+  <p>If you do not know how to access the folder you just shared, you can look at this tutorial <a href="http://www.howtogeek.com/191116/how-to-share-files-between-windows-mac-and-linux-pcs-on-a-network/">here</a>. Just follow the part which it teaches you how to access the shared folders.</p>
+</blockquote></div></body>
+</html>
