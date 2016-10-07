@@ -2,7 +2,7 @@
 
 This is a tutorial that guides you through building a blog with Hugo and GitHub Pages. For the slides I used, you can download it [here](https://github.com/ntuoss/Workshops/raw/master/TGIFHacks%20%2355%20-%20Free%20Blogging%20with%20GitHub/slides.pdf).
 
-## Installing hugo
+## Installing Hugo
 
 Here we'll only cover how to install `hugo` on Ubuntu since we'll be using the Cloud9 platform. If you would like to install it on your own computer, please refer to this [link](https://gohugo.io/overview/installing/).
 
