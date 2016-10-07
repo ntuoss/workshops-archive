@@ -60,6 +60,15 @@ $ git clone https://github.com/tanksuzuki/hemingway.git themes/hemingway
 
 ### Configure your theme
 
+Every theme needs some kind of configuration to make it fully functional. For example, you need to set the title of your website. Optionally, you can set thinkgs like your copyright notice, your Google Analytics key, your Disqus shortname for adding a comment section, and some links to your other sites (e.g. GitHub, Twitter).
+
+Here in our case, we need to set up the title and our base URL to make it work. Add the following lines in `config.toml`
+
+```toml
+baseurl = "http://replace-this-with-your-hugo-site.com"
+title = "Hemingway"
+```
+
 ### Adding a post
 
 Now you have your site and your theme, you need to put in some contents! Let's create a post for our blog with the following command
@@ -72,7 +81,13 @@ You should see that now there is a file in `content/post` named `hello-world.md`
 
 Open that file, and write something inside. The file uses the Markdown syntax. If you don't know any Markdown, don't worry! Plain text will work!
 
-After you finish writing a post, you wanna undraft that post (it's a draft by default). Type in the following command to undraft it
+After you finish writing a post, you should run a test server first to see how your site looks like. Type in the following command (when using Cloud9, remove bind and port otherwise)
+
+```bash
+$ hugo server --theme=hemingway --bind=$IP --port=$PORT 
+```
+
+Now you can check out your site at `http://replace-this-with-your-hugo-site.com`. If you think your site looks good, you wanna undraft that post (it's a draft by default). Type in the following command to undraft it
 
 ```bash
 $ hugo undraft content/post/hello-world.md
@@ -83,11 +98,21 @@ $ hugo undraft content/post/hello-world.md
 Ok, now you have everything you need to generate the actual website. And it's surprisingly easy. Just type in the following command
 
 ```bash
-$ hugo server --theme=hemingway --baseURL=<your website URL> --bind=$IP --port=$PORT 
+$ hugo --theme=hemingway
 ```
+
+After the website code is generated, it should be within the `public` folder.
 
 ## Uploading your blog to GitHub Pages
 
-TBA
+Great, now you already have your blog generated, you wanna put it somewhere on the Internet. GitHub Pages is a great place, because it's completely free. To make it happen, first create a repo named `<your GitHub username>.github.io` (don't initialize it!). Then go to the `public` folder generate by Hugo and type in the following command.
 
+```bash
+$ git init
+$ git remote add https://github.com/<your GitHub username>/<your GitHub username>.github.io.git
+$ git add .
+$ git commit -m "add my blog"
+$ git push origin master
+```
 
+After a few seconds, your site should be available at `http://<your GitHub username>.github.io`.
